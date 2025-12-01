@@ -8,6 +8,7 @@ void main() throws IOException {
     ArrayList<Character> rotations = new ArrayList<>();
     ArrayList<Integer> oldPositions = new ArrayList<>();
     ArrayList<Integer> newPositions = new ArrayList<>();
+    ArrayList<Integer> zeroCounts = new ArrayList<>();
 
     // splitting the input in two array lists (direction of rotation and the position)
     for (String rotation : inputData) {
@@ -15,33 +16,47 @@ void main() throws IOException {
         oldPositions.add(Integer.valueOf(rotation.substring(1)));
     }
 
-    calculateStartPosition(newPositions, oldPositions, rotations);
-    calculateCurrentPosition(newPositions, oldPositions, rotations);
+    calculateStartPosition(newPositions, oldPositions, rotations, zeroCounts);
+    calculateCurrentPosition(newPositions, oldPositions, rotations, zeroCounts);
     countPointZeros(newPositions);
+    countAllZeros(zeroCounts);
 }
 
 public static void calculateStartPosition
         (ArrayList<Integer> newPositions,
          ArrayList<Integer> oldPositions,
-         ArrayList<Character> rotations) {
+         ArrayList<Character> rotations,
+         ArrayList<Integer> zeroCounts) {
 
-    int oldPos;
-    int newPos;
+    int prevPos = START_POSITION;
+    int oldPos = oldPositions.getFirst();
+    int newPos = prevPos + oldPos;
+    int zeros;
 
     if (rotations.getFirst() == 'R') {
-        oldPos = START_POSITION;
-        newPos = oldPos + oldPositions.getFirst();
+        int distToZero = 100 - prevPos;
+        if (oldPos < distToZero) {
+            zeros = 0;
+        } else {
+            zeros = 1 + (oldPos - distToZero) / 100;
+        }
+        zeroCounts.add(zeros);
 
-        while (newPos >= MAX) {
-            newPos = newPos - MAX;
+        if (newPos >= MAX) {
+            newPos = newPos % 100;
         }
         newPositions.add(newPos);
     } else {
-        oldPos = START_POSITION;
-        newPos = oldPos - oldPositions.getFirst();
+        if (oldPos < prevPos) {
+            zeros = 0;
+        } else {
+            zeros = 1 + (oldPos - prevPos) / 100;
+        }
+        zeroCounts.add(zeros);
 
-        while (newPos < MIN) {
-            newPos = newPos + MAX;
+        if (newPos < MIN) {
+            int zero = (-newPos + 99) / 100;
+            newPos += 100 * zero;
         }
         newPositions.add(newPos);
     }
@@ -50,24 +65,53 @@ public static void calculateStartPosition
 public static void calculateCurrentPosition
         (ArrayList<Integer> newPositions,
          ArrayList<Integer> oldPositions,
-         ArrayList<Character> rotations) {
+         ArrayList<Character> rotations,
+         ArrayList<Integer> zeroCounts) {
 
     int oldPos;
     int newPos;
+    int zeros;
 
     for (int i = 1; i < rotations.size(); i++) {
+        int prevPos = newPositions.get(i - 1);
+
         if (rotations.get(i) == 'R') {
             oldPos = oldPositions.get(i);
-            newPos = newPositions.get(i - 1) + oldPos;
-            while (newPos >= MAX) {
-                newPos = newPos - MAX;
+            newPos = prevPos + oldPos;
+
+            if (prevPos == 0) {
+                zeros = oldPos / 100;
+            } else {
+                int distToZero = 100 - prevPos;
+                if (oldPos < distToZero) {
+                    zeros = 0;
+                } else {
+                    zeros = 1 + (oldPos - distToZero) / 100;
+                }
+            }
+            zeroCounts.add(zeros);
+
+            if (newPos >= MAX) {
+                newPos = newPos % 100;
             }
             newPositions.add(newPos);
+
         } else {
             oldPos = oldPositions.get(i);
-            newPos = newPositions.get(i - 1) - oldPos;
-            while (newPos < MIN) {
-                newPos = newPos + MAX;
+            newPos = prevPos - oldPos;
+
+            if (prevPos == 0) {
+                zeros = oldPos / 100;
+            } else if (oldPos < prevPos) {
+                zeros = 0;
+            } else {
+                zeros = 1 + (oldPos - prevPos) / 100;
+            }
+            zeroCounts.add(zeros);
+
+            if (newPos < MIN) {
+                int zero = (-newPos + 99) / 100;
+                newPos += 100 * zero;
             }
             newPositions.add(newPos);
         }
@@ -83,4 +127,13 @@ public static void countPointZeros(ArrayList<Integer> newPositions) {
         }
     }
     IO.println("The dial is pointing at zero for " + count + " times.");
+}
+
+public static void countAllZeros(ArrayList<Integer> zeroCounts) {
+    int sum = 0;
+
+    for (Integer zero : zeroCounts){
+        sum+= zero;
+    }
+    IO.println("The dial is rotated over zero for " + sum + " times.");
 }
