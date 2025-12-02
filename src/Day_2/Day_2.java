@@ -6,7 +6,7 @@ void main() throws IOException {
     ArrayList<String> invalidIDs = new ArrayList<>();
 
     separateIDs(splitID, startNumber, endNumber);
-    compareIDs(startNumber, endNumber, invalidIDs);
+    filterInvalidIds(startNumber, endNumber, invalidIDs);
     calculateSum(invalidIDs);
 }
 
@@ -22,9 +22,10 @@ public static void separateIDs(String[] splitID,
     }
 }
 
-public static void compareIDs(ArrayList<Long> startNumber,
-                              ArrayList<Long> endNumber,
-                              ArrayList<String> invalidIDs) {
+public static void filterInvalidIds
+        (ArrayList<Long> startNumber,
+         ArrayList<Long> endNumber,
+         ArrayList<String> invalidIDs) {
 
         for (int i = 0; i < startNumber.size(); i++) {
         long numberOne = startNumber.get(i);
