@@ -4,7 +4,7 @@ private static final int MIN = 0;
 
 void main() throws IOException {
 
-    ArrayList<String> inputData = (ArrayList<String>) Files.readAllLines(Paths.get("src/input.txt"));
+    ArrayList<String> inputData = (ArrayList<String>) Files.readAllLines(Paths.get("src/Day_1/input.txt"));
     ArrayList<Character> rotations = new ArrayList<>();
     ArrayList<Integer> oldPositions = new ArrayList<>();
     ArrayList<Integer> newPositions = new ArrayList<>();
