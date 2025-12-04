@@ -15,10 +15,8 @@ public static void separateIDs(String[] splitID,
                                ArrayList<Long> endNumber) {
 
     for (int i = 0; i < splitID.length-1;) {
-        startNumber.add(Long.valueOf(splitID[i]));
-        i++;
-        endNumber.add(Long.valueOf(splitID[i]));
-        i++;
+        startNumber.add(Long.valueOf(splitID[i++]));
+        endNumber.add(Long.valueOf(splitID[i++]));
     }
 }
 
