@@ -2,11 +2,11 @@ void main () throws IOException {
     ArrayList<String> inputData = (ArrayList<String>) Files.readAllLines(Paths.get("src/Day_3/input.txt"));
     ArrayList<Integer> highestBatteries = new ArrayList<>();
 
-    calculateHighesBatteries(inputData, highestBatteries);
+    calculateHighestBatteries(inputData, highestBatteries);
     calculateSum(highestBatteries);
 }
 
-public static void calculateHighesBatteries
+public static void calculateHighestBatteries
         (ArrayList<String> inputData,
          ArrayList<Integer> highestBatteries) {
 
@@ -30,7 +30,6 @@ public static void calculateHighesBatteries
         }
 
         highestBatteries.add(highestBatteriePair);
-        System.out.println(highestBatteriePair);
     }
 }
 
